@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Shopping Assistant</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='8' cy='21' r='1'></circle><circle cx='19' cy='21' r='1'></circle><path d='M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.56-7.43H5.12'></path></svg>">
+
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern Premium Aesthetic */
+        body { 
+            margin: 0; 
+            overflow-x: hidden; 
+            background-color: #000;
+            /* Premium Diversified Shopping Watermark - 8 Unique Icons */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240' fill='none' stroke='white' stroke-width='0.6' stroke-linecap='round' stroke-linejoin='round' style='opacity: 0.035'%3E%3C!-- 1: Cart --%3E%3Cg transform='translate(20, 20) scale(1.6)'%3E%3Ccircle cx='8' cy='21' r='1'/%3E%3Ccircle cx='19' cy='21' r='1'/%3E%3Cpath d='M2.05 2.05h1.5l2.6 11a2 2 0 0 0 2 1.5h9.7a2 2 0 0 0 1.9-1.5l1.5-7.5H5.1'/%3E%3C/g%3E%3C!-- 2: Bag --%3E%3Cg transform='translate(100, 20) scale(1.6)'%3E%3Cpath d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'/%3E%3C/g%3E%3C!-- 3: Tag --%3E%3Cg transform='translate(180, 20) scale(1.6)'%3E%3Cpath d='M10 2l9 9-7 7-9-9V2z'/%3E%3Ccircle cx='6' cy='6' r='0.5' fill='white'/%3E%3C/g%3E%3C!-- 4: Box --%3E%3Cg transform='translate(20, 100) scale(1.6)'%3E%3Cpath d='M21 8l-9-4-9 4v8l9 4 9-4V8z'/%3E%3Cpath d='M3 8l9 4 9-4'/%3E%3C/g%3E%3C!-- 5: Wallet --%3E%3Cg transform='translate(100, 100) scale(1.6)'%3E%3Cpath d='M20 7h-9l-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z'/%3E%3Cpath d='M16 13h4'/%3E%3C/g%3E%3C!-- 6: Card --%3E%3Cg transform='translate(180, 100) scale(1.6)'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cpath d='M2 9h20'/%3E%3C/g%3E%3C!-- 7: Discount --%3E%3Cg transform='translate(20, 180) scale(1.6)'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9 15l6-6'/%3E%3Ccircle cx='9.5' cy='9.5' r='0.5' fill='white'/%3E%3Ccircle cx='14.5' cy='14.5' r='0.5' fill='white'/%3E%3C/g%3E%3C!-- 8: Gift --%3E%3Cg transform='translate(100, 180) scale(1.6)'%3E%3Crect x='3' y='8' width='18' height='13'/%3E%3Cpath d='M12 21V8 M3 12h18 M12 8c0-2-2-4-4-4s-4 2-4 4 M12 8c0-2 2-4 4-4s4 2 4 4'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-attachment: fixed;
+            color: #f8fafc; 
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .glass-panel {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 28px;
+            
+            /* Deep 3D Shadow Stack */
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.4),
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+                
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            --glow-color: rgba(255, 255, 255, 0.15); /* Softened default glow */
+        }
+
+        .glass-panel:hover {
+            border-color: var(--glow-color);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            
+            /* Enhanced Neon Glow Elevation */
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 15px var(--glow-color), /* Reduced neon outer glow */
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                
+            transform: translateY(-12px) rotateX(2deg) scale(1.03);
+        }
+
+        /* Moving Color Animation Inside */
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, 
+                rgba(139, 92, 246, 0.1) 0%, 
+                rgba(6, 182, 212, 0.05) 25%, 
+                transparent 50%);
+            animation: flowColors 12s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes flowColors {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .glass-panel > * {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* High-Intensity Glow Colors for Each Box */
+        #tabVoice { --glow-color: rgba(168, 85, 247, 0.4); }   /* Softened Purple */
+        #tabShopSmart { --glow-color: rgba(249, 115, 22, 0.4); } /* Softened Orange */
+        #tabTracker { --glow-color: rgba(59, 130, 246, 0.4); }   /* Softened Blue */
+        #tabLiveView { --glow-color: rgba(16, 185, 129, 0.4); }  /* Softened Emerald */
+        #welcomeSection { --glow-color: rgba(255, 255, 255, 0.1); }
+
+        /* Welcome & Login Box — fully static, no animations */
+        #welcomeSection, #loginBox {
+            transition: none !important;
+            animation: none !important;
+            transform: none !important;
+            transform-style: flat !important;
+        }
+        #welcomeSection::before, #loginBox::before {
+            animation: none !important;
+            background: none !important;
+        }
+        #welcomeSection:hover, #loginBox:hover {
+            transform: none !important;
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.4),
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+        }
+        #authSection div.glass-panel { --glow-color: rgba(6, 182, 212, 0.2); }
+        #voiceSection div.glass-panel { --glow-color: rgba(168, 85, 247, 0.3); }
+        #trackerSection div.glass-panel { --glow-color: rgba(59, 130, 246, 0.3); }
+        #shopsmartSection div.glass-panel { --glow-color: rgba(249, 115, 22, 0.3); }
+        #liveViewSection div.glass-panel { --glow-color: rgba(16, 185, 129, 0.3); }
+
+        .glass-panel:hover {
+            border-color: var(--glow-color);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            
+            /* Ultra-Intense Neon Glow Elevation */
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.6),
+                0 0 25px var(--glow-color), /* Reduced neon outer glow */
+                0 0 50px rgba(0, 0, 0, 0.2),
+                inset 0 1px 3px rgba(255, 255, 255, 0.4);
+                
+            transform: translateY(-15px) rotateX(3deg) scale(1.04);
+        }
+
+        .static-glass:hover {
+            transform: none !important;
+        }
+
+        .voice-btn-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .voice-btn-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Logout Button - Red Neon Animation */
+        #logoutBtn {
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        #logoutBtn:hover {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: #ef4444;
+            box-shadow: 
+                0 0 15px rgba(239, 68, 68, 0.6),
+                0 0 30px rgba(239, 68, 68, 0.2);
+            transform: scale(1.05);
+            animation: logoutPulse 2s infinite;
+        }
+
+        @keyframes logoutPulse {
+            0% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.8), 0 0 50px rgba(239, 68, 68, 0.3); }
+            100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        }
+
+        /* Home Button - White Neon Animation */
+        #homeBtn {
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        #homeBtn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-color: #ffffff;
+            box-shadow: 
+                0 0 15px rgba(255, 255, 255, 0.6),
+                0 0 30px rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+            animation: homePulse 2s infinite;
+        }
+
+        @keyframes homePulse {
+            0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 50px rgba(255, 255, 255, 0.3); }
+            100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+        }
+
+        .voice-btn-container:active {
+            transform: scale(0.95);
+        }
+
+        .voice-core {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 30%, #c4b5fd 0%, #6d28d9 40%, #172554 100%);
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.6), inset 5px 5px 15px rgba(255,255,255,0.4);
+            z-index: 10;
+        }
+
+        .voice-ring-inner {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3), inset 0 0 10px rgba(139, 92, 246, 0.3);
+            z-index: 5;
+            transition: all 0.3s ease;
+        }
+
+        .voice-ring-outer {
+            position: absolute;
+            width: 164px;
+            height: 164px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: conic-gradient(from 0deg, transparent 0%, rgba(6, 182, 212, 0.2) 20%, rgba(139, 92, 246, 0.2) 40%, transparent 60%);
+            z-index: 4;
+            animation: spin 6s linear infinite;
+        }
+
+        .voice-glow {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle at top left, rgba(6, 182, 212, 0.4) 0%, transparent 60%);
+            filter: blur(12px);
+            z-index: 6;
+            animation: spin-glow 4s linear infinite;
+            pointer-events: none;
+            transition: background 0.3s ease;
+        }
+
+        .eq-bars {
+            position: absolute;
+            bottom: -25px;
+            display: flex;
+            gap: 2px;
+            height: 20px;
+            align-items: flex-end;
+            justify-content: center;
+            width: 60px;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .eq-bar {
+            width: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
+
+        /* Animation when listening */
+        .listening .voice-glow {
+            background: radial-gradient(circle at top left, rgba(6, 182, 212, 1) 0%, transparent 60%);
+            animation: spin-glow 1.5s linear infinite;
+        }
+        
+        .listening .voice-ring-inner {
+            border-color: rgba(6, 182, 212, 0.6);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.5), inset 0 0 15px rgba(6, 182, 212, 0.5);
+            animation: pulse-ring 1s ease-in-out infinite alternate;
+        }
+
+        .listening .voice-core {
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.6), inset 5px 5px 25px rgba(6, 182, 212, 0.5);
+        }
+
+        .listening .eq-bars {
+            opacity: 1;
+        }
+
+        .listening .eq-bar {
+            animation: eq-play 0.4s ease-in-out infinite alternate;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .eq-bar:nth-child(1) { height: 4px; animation-delay: 0.1s; }
+        .eq-bar:nth-child(2) { height: 8px; animation-delay: 0.2s; }
+        .eq-bar:nth-child(3) { height: 12px; animation-delay: 0.3s; }
+        .eq-bar:nth-child(4) { height: 16px; animation-delay: 0.4s; }
+        .eq-bar:nth-child(5) { height: 10px; animation-delay: 0.5s; }
+        .eq-bar:nth-child(6) { height: 18px; animation-delay: 0.2s; }
+        .eq-bar:nth-child(7) { height: 11px; animation-delay: 0.6s; }
+        .eq-bar:nth-child(8) { height: 9px; animation-delay: 0.1s; }
+        .eq-bar:nth-child(9) { height: 13px; animation-delay: 0.4s; }
+        .eq-bar:nth-child(10) { height: 6px; animation-delay: 0.3s; }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes spin-glow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
+        @keyframes eq-play {
+            0% { height: 4px; }
+            100% { height: 100%; }
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .element-3d {
+            transform: translateZ(30px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .anim-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .premium-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        .premium-input:focus {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .premium-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .premium-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .premium-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Fix for chart canvas */
+        #priceChart {
+            max-height: 100% !important;
+        }
+
+        /* New Premium Search Bar Design */
+        .search-container-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+            overflow: visible;
+        }
+
+        .input-stylized {
+          width: 100%;
+          height: 100%;
+          border: 2px solid rgba(255, 255, 255, 0.15);
+          outline: none;
+          z-index: 1;
+          background: transparent;
+          padding: 10px;
+          padding-left: 35px;
+          padding-right: 40px;
+          font-size: 16px;
+          border-radius: 16px;
+          color: #fff;
+          transition: all 0.3s ease;
+        }
+
+        .input-stylized:focus {
+          border: 1px solid rgb(242, 0, 255);
+          background: #191919;
+        }
+
+        .search-icon,
+        .filter-icon {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .filter-icon {
+          left: unset;
+          right: 10px;
+        }
+
+        .circle-left,
+        .circle-right {
+          position: absolute;
+          left: 15%;
+          top: 20%;
+          background: linear-gradient(rgb(255, 0, 242), rgb(255, 0, 195));
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          filter: blur(50px);
+          z-index: -1;
+          opacity: 0.6;
+        }
+
+        .circle-right {
+          left: unset;
+          right: 16%;
+          top: 30%;
+          background: linear-gradient(blue, rgb(255, 0, 230));
+        }
+
+        .card-stylized {
+          position: relative;
+          height: 60px;
+          width: 100%;
+          max-width: 450px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+          border-radius: 16px;
+          z-index: 1;
+        }
+
+        .card-stylized::before {
+          content: "";
+          position: absolute;
+          width: 50px;
+          height: 600%;
+          background: linear-gradient(#ff00e6, #ffffff33, #295bff);
+          animation: animate 4s linear infinite;
+        }
+
+        .card-stylized::after {
+          content: "";
+          inset: 1.5px;
+          position: absolute;
+          background: #000000;
+          border-radius: 15px;
+          backdrop-filter: blur(30px);
+          z-index: 0;
+        }
+
+        @keyframes animate {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .search-action-btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+        .search-action-btn:hover {
+            transform: scale(1.1);
+        }
+        .search-action-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            contain: strict;
+        }
+
+        #splash-screen svg {
+            width: 180px;
+            height: 180px;
+            color: #06b6d4; /* Cyan neon */
+            animation: logoZoom 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+
+        @keyframes logoZoom {
+            0% {
+                transform: scale(0.3) translateZ(0);
+                opacity: 0;
+                filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+            }
+            25% {
+                opacity: 1;
+                transform: scale(1) translateZ(0);
+                filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)) drop-shadow(0 0 40px rgba(139, 92, 246, 0.6));
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.1) translateZ(0);
+                filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.9)) drop-shadow(0 0 50px rgba(139, 92, 246, 0.7));
+            }
+            85% {
+                opacity: 0.8;
+                /* Remove filter for performance during massive zoom */
+                filter: none;
+            }
+            100% {
+                transform: scale(40) translateZ(0);
+                opacity: 0;
+                filter: none;
+            }
+        }
+
+        .splash-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Initial state of main content */
+        .main-content-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .main-content-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8 text-slate-100 relative">
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="21" r="1"></circle>
+            <circle cx="19" cy="21" r="1"></circle>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.56-7.43H5.12"></path>
+        </svg>
+    </div>
+
+    <!-- Header (Moved to top left, reduced size) -->
+    <header id="mainHeader" class="main-content-hidden absolute w-full px-6 py-4 top-0 left-0 md:px-8 md:py-6 flex flex-col z-20 pointer-events-none">
+        <div class="flex items-center element-3d pointer-events-auto">
+            <!-- Modern Shopping Bag Logo -->
+            <svg class="w-8 h-8 text-slate-200 mr-3 filter drop-shadow-lg opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <h1 class="text-xl md:text-2xl font-extrabold text-gradient drop-shadow-2xl tracking-[0.05em] uppercase">SHOPPING ASSISTANT</h1>
+            <div class="ml-auto flex items-center space-x-4">
+                <button id="homeBtn" class="hidden bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-bold tracking-widest uppercase transition-all flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Home
+                </button>
+                <button id="logoutBtn" class="hidden bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-bold tracking-widest uppercase transition-all">Logout</button>
+            </div>
+        </div>
+        <p class="text-slate-400 text-xs md:text-sm ml-[2.75rem] font-light tracking-wide pointer-events-auto">
+            Intelligent search & real-time market tracking.
+        </p>
+    </header>
+
+    <!-- Authentication Section (Hidden by default) -->
+    <div id="authSection" class="fixed inset-0 z-[50] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md transition-all duration-700 opacity-0 invisible translate-y-10">
+        <div id="loginBox" class="glass-panel w-full max-w-md p-10 relative overflow-hidden">
+            <!-- Glow background effect -->
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-purple-600/20 blur-[80px] rounded-full"></div>
+            <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-600/20 blur-[80px] rounded-full"></div>
+
+            <div class="relative z-10">
+                <div class="text-center mb-10">
+                    <div class="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h2 id="authTitle" class="text-3xl font-extrabold text-white tracking-tight">Login</h2>
+                    <p id="authSubtitle" class="text-slate-400 mt-2 font-light">Enter your credentials to continue</p>
+                </div>
+
+                <form id="authForm" class="space-y-6">
+                    <div id="regNameFields" class="hidden space-y-6">
+                        <div class="relative">
+                            <input type="text" id="regFirstName" class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-purple-500/50 transition-all placeholder:text-slate-600" placeholder="First Name">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <input type="email" id="authEmail" class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-purple-500/50 transition-all placeholder:text-slate-600" placeholder="Email Address" required>
+                    </div>
+
+                    <div class="relative">
+                        <input type="password" id="authPassword" class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-purple-500/50 transition-all placeholder:text-slate-600" placeholder="Password" required>
+                    </div>
+
+                    <button type="submit" id="authSubmitBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-bold tracking-widest uppercase text-sm shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
+                        Sign In
+                    </button>
+                </form>
+
+                <div id="authErrorMessage" class="hidden mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                    <p class="text-red-400 text-sm text-center font-medium"></p>
+                </div>
+
+                <div class="mt-10 text-center border-t border-white/5 pt-8">
+                    <p class="text-slate-500 text-sm">
+                        <span id="toggleAuthText">Don't have an account?</span>
+                        <button id="toggleAuthBtn" class="text-purple-400 font-bold ml-2 hover:text-purple-300 transition-colors">Create Account</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContent" class="main-content-hidden max-w-6xl mx-auto relative z-10 pt-20 md:pt-16">
+        <!-- Feature Selection Tabs -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 element-3d max-w-6xl mx-auto">
+            <div id="tabVoice" class="glass-panel p-6 cursor-pointer border-2 border-transparent hover:border-white/20 transition-all outline-none" role="button" tabindex="0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 shadow-lg border border-purple-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white tracking-wide">Shopping Assistant</h3>
+                        <p class="text-slate-400 text-sm">Hands-free smart shopping</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tabShopSmart" class="glass-panel p-6 cursor-pointer border-2 border-transparent hover:border-white/20 transition-all outline-none" role="button" tabindex="0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 shadow-lg border border-orange-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white tracking-wide">ShopSmart</h3>
+                        <p class="text-slate-400 text-sm">Compare prices instantly</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tabTracker" class="glass-panel p-6 cursor-pointer border-2 border-transparent hover:border-white/20 transition-all outline-none" role="button" tabindex="0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 shadow-lg border border-blue-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white tracking-wide">Price Tracker</h3>
+                        <p class="text-slate-400 text-sm">Analyze market trends</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Renewed Reviews Tab -->
+            <div id="tabLiveView" class="glass-panel p-6 cursor-pointer border-2 border-transparent hover:border-white/20 transition-all outline-none" role="button" tabindex="0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-lg border border-emerald-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white tracking-wide">Reviews</h3>
+                        <p class="text-slate-400 text-sm">Real customer photos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mainContentArea" class="relative max-w-2xl mx-auto">
+            <!-- Welcome Section -->
+            <div id="welcomeSection" class="glass-panel p-10 text-center mb-8 transition-all duration-300 max-w-2xl mx-auto mt-4">
+                <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-purple-500/20 to-blue-500/20 p-[2px] mb-8 shadow-xl shadow-purple-500/10 flex items-center justify-center border border-white/10">
+                    <span class="text-4xl filter drop-shadow-md">✨</span>
+                </div>
+                <h2 class="text-3xl font-extrabold text-white mb-5 tracking-wide drop-shadow-md">Welcome to Shopping Assistant</h2>
+                <p class="text-slate-300 text-lg font-light leading-relaxed mb-10 px-4">
+                    Your intelligent shopping companion. Experience hands-free product searching across top platforms or track price drops with our advanced analytics engine.
+                </p>
+                <div class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-white/5 border border-white/10 text-slate-400 font-medium uppercase tracking-widest text-xs shadow-inner">
+                    <svg class="w-4 h-4 mr-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                    Select an option above to begin
+                </div>
+            </div>
+
+            <!-- Voice Control Section -->
+            <div id="voiceSection" class="space-y-8 hidden transition-opacity duration-300">
+                <!-- Voice Control Section -->
+                <div class="glass-panel p-10 flex flex-col items-center" data-tilt data-tilt-max="4" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
+                    <div class="flex flex-col items-center element-3d w-full">
+                        <button id="micButton" class="voice-btn-container bg-transparent border-none outline-none">
+                            <div class="voice-core"></div>
+                            <div class="voice-glow"></div>
+                            <div class="voice-ring-inner"></div>
+                            <div class="voice-ring-outer"></div>
+                            
+                            <div class="eq-bars">
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                            </div>
+                        </button>
+
+                        <div class="mt-8 text-center w-full">
+                            <p id="status" class="text-xl font-medium text-slate-200 mb-3 drop-shadow-md tracking-wide">Tap to speak</p>
+                            <div id="transcriptBox" class="hidden bg-black/30 border border-white/10 rounded-2xl p-5 mt-4 transition-all transform translate-z-10 shadow-inner">
+                                <p class="text-slate-400 text-xs mb-2 uppercase tracking-widest font-semibold flex items-center justify-center">
+                                    <span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2 animate-pulse"></span> Captured
+                                </p>
+                                <p id="transcript" class="text-2xl font-bold text-white tracking-wide"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="glass-panel p-8" data-tilt data-tilt-axis="y" data-tilt-max="2">
+                    <h3 class="text-lg font-bold text-slate-200 mb-5 tracking-widest uppercase text-sm flex items-center element-3d border-b border-white/10 pb-3">
+                        <svg class="w-4 h-4 mr-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Suggestions
+                    </h3>
+                    <ul class="text-slate-300 space-y-4 font-normal element-3d text-lg">
+                        <li class="flex items-center hover:text-white transition-colors cursor-default"><span class="w-1.5 h-1.5 rounded-full bg-slate-300 mr-4 opacity-50"></span> "iPhone 16 in Flipkart"</li>
+                        <li class="flex items-center hover:text-white transition-colors cursor-default"><span class="w-1.5 h-1.5 rounded-full bg-slate-300 mr-4 opacity-50"></span> "Badminton shoes in Amazon"</li>
+                        <li class="flex items-center hover:text-white transition-colors cursor-default"><span class="w-1.5 h-1.5 rounded-full bg-slate-300 mr-4 opacity-50"></span> "Sneakers in Myntra"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Price Tracker Section -->
+            <div id="trackerSection" class="space-y-8 hidden transition-opacity duration-300">
+                <div class="glass-panel p-8 md:p-10" data-tilt data-tilt-max="3" data-tilt-speed="500">
+                    <h2 class="text-3xl font-bold text-white mb-8 flex items-center element-3d tracking-tight">
+                        <svg class="w-7 h-7 text-slate-200 mr-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Analytics Tracker
+                    </h2>
+
+                    <!-- URL Input -->
+                    <div class="mb-8 element-3d">
+                        <label class="block text-xs font-semibold text-slate-400 mb-3 tracking-widest uppercase text-center">
+                            Target Product URL
+                        </label>
+                        <div class="search-container-wrapper">
+                            <div class="circle-left"></div>
+                            <div class="card-stylized">
+                                <div class="search-icon">
+                                    <svg stroke-width="24.9084" stroke="#ffffff" xml:space="preserve" viewBox="-48.84 -48.84 586.08 586.08" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Capa_1" version="1.1" width="20px" height="20px" fill="#d0d0d0">
+                                        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                                        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+                                        <g id="SVGRepo_iconCarrier"><g><g><path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6 s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2 S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7 S381.9,104.65,381.9,203.25z"></path></g></g></g>
+                                    </svg>
+                                </div>
+                                <input autocomplete="off" class="input-stylized" id="productUrl" placeholder="Paste link (Amazon, Flipkart...)" name="text" type="text" />
+                                <div class="filter-icon">
+                                    <button class="search-action-btn" id="trackBtn" title="Analyze">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1.5 -1.5 28.00 28.00" fill="#d0d0d0" width="30px" height="30px">
+                                            <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                                            <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+                                            <g id="SVGRepo_iconCarrier"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="0.17500000000000002" stroke="#ffffff" d="M22 3.58002H2C1.99912 5.28492 2.43416 6.96173 3.26376 8.45117C4.09337 9.94062 5.29 11.1932 6.73999 12.09C7.44033 12.5379 8.01525 13.1565 8.41062 13.8877C8.80598 14.6189 9.00879 15.4388 9 16.27V21.54L15 20.54V16.25C14.9912 15.4188 15.194 14.599 15.5894 13.8677C15.9847 13.1365 16.5597 12.5178 17.26 12.07C18.7071 11.175 19.9019 9.92554 20.7314 8.43988C21.5608 6.95422 21.9975 5.28153 22 3.58002Z"></path></g>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="circle-right"></div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loadingState" class="hidden text-center py-10 element-3d">
+                        <div class="w-12 h-12 border-[3px] border-white/20 border-t-white rounded-full mx-auto mb-5 shadow-lg" style="animation: spin 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;"></div>
+                        <p class="text-slate-300 font-medium tracking-widest uppercase text-sm animate-pulse">Syncing Data...</p>
+                    </div>
+
+                    <!-- Current Price Display -->
+                    <div id="priceDisplay" class="hidden mb-8 bg-white/5 border border-white/10 rounded-2xl p-7 shadow-xl element-3d backdrop-blur-sm" data-tilt data-tilt-max="2" data-tilt-glare data-tilt-max-glare="0.2">
+                        <div class="mb-6 flex justify-between items-start">
+                            <div class="flex-1 pr-4">
+                                <p id="productTitle" class="text-xl font-bold text-white mb-2 leading-tight"></p>
+                                <p class="text-sm text-slate-300 font-medium flex items-center">
+                                    <span id="productPlatform" class="uppercase tracking-wider mr-3 bg-white/10 px-2.5 py-1 rounded text-xs border border-white/5"></span>
+                                    <span id="productAvailability" class="opacity-80"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 border-t border-white/10 pt-5 mt-2">
+                            <div>
+                                <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-1">Current Value</p>
+                                <p id="currentPrice" class="text-4xl font-extrabold text-white drop-shadow-md">₹0</p>
+                            </div>
+                            <div class="text-right flex flex-col items-end">
+                                <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-1 flex items-center">
+                                    Lowest Logged <svg class="w-3 h-3 ml-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                                </p>
+                                <p id="lowestPrice" class="text-3xl font-bold text-slate-200">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="hidden p-5 bg-red-500/10 border border-red-500/30 rounded-xl mb-6 shadow-lg element-3d">
+                        <p class="text-red-200 text-sm font-medium flex items-center">
+                            <svg class="w-5 h-5 mr-3 shrink-0 opacity-80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                            <span class="flex-1 tracking-wide"></span>
+                        </p>
+                    </div>
+
+                    <!-- Price Graph -->
+                    <div id="chartContainer" class="hidden h-[260px] element-3d p-6 bg-black/20 rounded-2xl border border-white/5 shadow-inner" data-tilt data-tilt-max="2" data-tilt-axis="x">
+                        <h3 class="text-xs font-bold text-slate-300 mb-4 tracking-widest uppercase flex items-center">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-400 mr-3"></span>
+                            30-Day Trajectory
+                        </h3>
+                        <div class="relative h-40">
+                            <canvas id="priceChart" class="absolute inset-0 w-full h-full object-contain filter drop-shadow-lg opacity-90"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ShopSmart Section -->
+            <div id="shopsmartSection" class="space-y-8 hidden transition-opacity duration-300">
+                <div class="glass-panel p-8 md:p-10 border border-orange-500/10" data-tilt data-tilt-max="3" data-tilt-speed="500">
+                    <h2 class="text-3xl font-bold text-white mb-8 flex items-center element-3d tracking-tight">
+                        <svg class="w-7 h-7 text-orange-400 mr-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+                        </svg>
+                        ShopSmart: Price Comparison Engine
+                    </h2>
+
+                    <!-- URL Input -->
+                    <div class="mb-8 element-3d">
+                        <label class="block text-xs font-semibold text-slate-400 mb-3 tracking-widest uppercase text-center">
+                            Product URL to Compare
+                        </label>
+                        <div class="search-container-wrapper">
+                            <div class="circle-left" style="background: linear-gradient(#f97316, #ea580c)"></div>
+                            <div class="card-stylized" style="max-width: 500px;">
+                                <div class="search-icon">
+                                    <svg stroke-width="24.9084" stroke="#ffffff" xml:space="preserve" viewBox="-48.84 -48.84 586.08 586.08" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Capa_1" version="1.1" width="20px" height="20px" fill="#d0d0d0">
+                                        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                                        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+                                        <g id="SVGRepo_iconCarrier"><g><g><path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6 s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2 S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7 S381.9,104.65,381.9,203.25z"></path></g></g></g>
+                                    </svg>
+                                </div>
+                                <input autocomplete="off" class="input-stylized" id="shopsmartUrl" placeholder="Paste link (Amazon, Flipkart...)" name="text" type="text" />
+                                <div class="filter-icon">
+                                    <button class="search-action-btn" id="compareBtn" title="Compare">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1.5 -1.5 28.00 28.00" fill="#d0d0d0" width="30px" height="30px">
+                                            <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                                            <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+                                            <g id="SVGRepo_iconCarrier"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="0.17500000000000002" stroke="#ffffff" d="M22 3.58002H2C1.99912 5.28492 2.43416 6.96173 3.26376 8.45117C4.09337 9.94062 5.29 11.1932 6.73999 12.09C7.44033 12.5379 8.01525 13.1565 8.41062 13.8877C8.80598 14.6189 9.00879 15.4388 9 16.27V21.54L15 20.54V16.25C14.9912 15.4188 15.194 14.599 15.5894 13.8677C15.9847 13.1365 16.5597 12.5178 17.26 12.07C18.7071 11.175 19.9019 9.92554 20.7314 8.43988C21.5608 6.95422 21.9975 5.28153 22 3.58002Z"></path></g>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="circle-right" style="background: linear-gradient(#ea580c, #facc15)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="shopsmartLoading" class="hidden text-center py-10 element-3d">
+                        <div class="w-12 h-12 border-[3px] border-orange-500/20 border-t-orange-500 rounded-full mx-auto mb-5 shadow-lg relative" style="animation: spin 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;">
+                            <div class="absolute inset-0 rounded-full blur-sm bg-orange-500/20"></div>
+                        </div>
+                        <p class="text-orange-200 font-medium tracking-widest uppercase text-sm animate-pulse">Scanning Platforms...</p>
+                    </div>
+
+                    <!-- Comparison Results -->
+                    <div id="shopsmartResults" class="hidden element-3d">
+                        <div class="mb-6 flex items-start">
+                            <div class="flex-1">
+                                <p id="ssProductTitle" class="text-xl font-bold text-white mb-2 leading-tight"></p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="ssCardsContainer">
+                            <!-- Cards inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="ssErrorMessage" class="hidden p-5 bg-red-500/10 border border-red-500/30 rounded-xl mb-6 shadow-lg element-3d">
+                        <p class="text-red-200 text-sm font-medium flex items-center">
+                            <svg class="w-5 h-5 mr-3 shrink-0 opacity-80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                            <span class="flex-1 tracking-wide"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div id="liveViewSection" class="space-y-8 hidden transition-opacity duration-300 max-w-5xl mx-auto">
+            <div class="glass-panel static-glass p-8 md:p-10 border border-emerald-500/10">
+                <h2 class="text-3xl font-bold text-white mb-8 flex items-center tracking-tight">
+                    <svg class="w-7 h-7 text-emerald-400 mr-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Reviews: Customer Photo Extractor
+                </h2>
+
+                <!-- URL Input -->
+                <div class="mb-8">
+                    <label class="block text-xs font-semibold text-slate-400 mb-3 tracking-widest uppercase text-center">
+                        Target Product URL
+                    </label>
+                    <div class="search-container-wrapper">
+                        <div class="circle-left" style="background: linear-gradient(#10b981, #059669)"></div>
+                        <div class="card-stylized" style="max-width: 500px;">
+                            <div class="search-icon">
+                                <svg stroke-width="24.9084" stroke="#ffffff" xml:space="preserve" viewBox="-48.84 -48.84 586.08 586.08" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Capa_1" version="1.1" width="20px" height="20px" fill="#d0d0d0">
+                                    <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                                    <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+                                    <g id="SVGRepo_iconCarrier"><g><g><path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6 s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2 S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7 S381.9,104.65,381.9,203.25z"></path></g></g></g>
+                                </svg>
+                            </div>
+                            <input autocomplete="off" class="input-stylized" id="liveViewUrl" placeholder="Paste link (Amazon, Flipkart, etc.)" name="text" type="text" />
+                            <div class="filter-icon">
+                                <button class="search-action-btn" id="extractPhotosBtn" title="Extract Photos">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1.5 -1.5 28.00 28.00" fill="#d0d0d0" width="30px" height="30px">
+                                        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                                        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+                                        <g id="SVGRepo_iconCarrier"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="0.17500000000000002" stroke="#ffffff" d="M22 3.58002H2C1.99912 5.28492 2.43416 6.96173 3.26376 8.45117C4.09337 9.94062 5.29 11.1932 6.73999 12.09C7.44033 12.5379 8.01525 13.1565 8.41062 13.8877C8.80598 14.6189 9.00879 15.4388 9 16.27V21.54L15 20.54V16.25C14.9912 15.4188 15.194 14.599 15.5894 13.8677C15.9847 13.1365 16.5597 12.5178 17.26 12.07C18.7071 11.175 19.9019 9.92554 20.7314 8.43988C21.5608 6.95422 21.9975 5.28153 22 3.58002Z"></path></g>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="circle-right" style="background: linear-gradient(#059669, #34d399)"></div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="liveViewLoading" class="hidden text-center py-10">
+                    <div class="w-12 h-12 border-[3px] border-emerald-500/20 border-t-emerald-500 rounded-full mx-auto mb-5 shadow-lg relative" style="animation: spin 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;">
+                        <div class="absolute inset-0 rounded-full blur-sm bg-emerald-500/20"></div>
+                    </div>
+                    <p class="text-emerald-200 font-medium tracking-widest uppercase text-sm animate-pulse">Aggregating Reviews from All Platforms...</p>
+                </div>
+
+                <!-- Review Feed Results -->
+                <div id="liveViewResults" class="hidden">
+                    <!-- Written Reviews Section -->
+                    <div class="mb-12">
+                        <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
+                            <h3 class="text-xl font-bold text-white tracking-wide">Customer Comments</h3>
+                            <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] uppercase font-bold rounded-lg tracking-widest">Feedback Feed</span>
+                        </div>
+                        <div id="lvTextFeed" class="space-y-4">
+                            <!-- Text reviews will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Photo Gallery Section -->
+                    <div>
+                        <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
+                            <h3 class="text-xl font-bold text-white tracking-wide">Customer Photo Gallery</h3>
+                            <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] uppercase font-bold rounded-lg tracking-widest">Visual Proof</span>
+                        </div>
+                        <div id="lvPhotoFeed" class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+                            <!-- Photos will be injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="lvErrorMessage" class="hidden p-5 bg-red-500/10 border border-red-500/30 rounded-xl mb-6 shadow-lg">
+                    <p class="text-red-200 text-sm font-medium flex items-center">
+                        <svg class="w-5 h-5 mr-3 shrink-0 opacity-80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                        <span class="flex-1 tracking-wide" id="lvErrorText"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search History -->
+        <div id="searchHistory" class="glass-panel p-8 md:p-10 mt-10 hidden mb-12" data-tilt data-tilt-max="1" data-tilt-speed="1000">
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center element-3d tracking-tight">
+                <svg class="w-7 h-7 text-slate-200 mr-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                Archive
+            </h2>
+            <div id="historyList" class="space-y-4 element-3d"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            VanillaTilt.init(document.querySelectorAll(".glass-panel:not(#welcomeSection)"), {
+                max: 5,
+                speed: 400,
+                glare: true,
+                "max-glare": 0.1,
+                perspective: 1200,
+                scale: 1.01
+            });
+
+            // Splash Screen Transition
+            const splash = document.getElementById('splash-screen');
+            const header = document.getElementById('mainHeader');
+            const content = document.getElementById('mainContent');
+            const authSection = document.getElementById('authSection');
+
+            setTimeout(() => {
+                splash.classList.add('splash-hidden');
+                
+                // Auth Check (Use sessionStorage for tab-only persistence)
+                const token = sessionStorage.getItem('token');
+                
+                setTimeout(() => {
+                    if (token) {
+                        // User is logged in, show main content
+                        header.classList.add('main-content-visible');
+                        content.classList.add('main-content-visible');
+                    } else {
+                        // User not logged in, show auth section
+                        authSection.classList.remove('invisible', 'opacity-0', 'translate-y-10', 'splash-hidden');
+                        authSection.classList.add('opacity-100', 'translate-y-0');
+                    }
+                }, 400); // Small delay for smoother reveal
+            }, 2800); // Matches the new 2.8s duration
+        });
+    </script>
+    <script src="js/app.js"></script>
+</body>
+</html>
