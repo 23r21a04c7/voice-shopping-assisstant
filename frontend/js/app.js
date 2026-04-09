@@ -1,5 +1,5 @@
 // API Configuration
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3000/apihttps://voice-shopping-assisstant-backend.onrender.com';
 
 // DOM Elements
 const micButton = document.getElementById('micButton');
@@ -571,7 +571,7 @@ if (compareBtn) {
 }
 
 function showSsError(message) {
-    if(!ssErrorMessage) return;
+    if (!ssErrorMessage) return;
     ssErrorMessage.querySelector('span').textContent = message;
     ssErrorMessage.classList.remove('hidden');
     shopsmartResults.classList.add('hidden');
@@ -580,32 +580,32 @@ function showSsError(message) {
 function displayComparison(data) {
     if (!data || !data.results) return;
     ssProductTitle.textContent = data.title;
-    
+
     // Find the min price among available products (ensure numeric comparison)
     const availableResults = data.results.filter(r => r.price !== null && r.price > 0 && r.url);
     const prices = availableResults.map(r => Number(r.price));
     const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    
+
     // Generate cards
     ssCardsContainer.innerHTML = data.results.map(platformConfig => {
         const priceValue = platformConfig.price !== null ? Number(platformConfig.price) : 0;
         const isAvailable = priceValue > 0 && platformConfig.url;
-        
+
         if (!isAvailable) {
             // Compact, dimmed card for unavailable platforms
             return '<div class="relative rounded-2xl p-4 border border-white/5 bg-white/5 opacity-40 flex flex-col justify-center items-center shadow-inner scale-95">' +
                 '<p class="text-[9px] text-slate-500 uppercase tracking-widest mb-1 font-bold">' + platformConfig.platform + '</p>' +
                 '<p class="text-xs font-semibold text-slate-500">Not Available</p>' +
                 '<div class="mt-2 text-[8px] text-slate-600 italic">No exact match found</div>' +
-            '</div>';
+                '</div>';
         }
 
         const isLowest = priceValue === minPrice && minPrice > 0;
         const isHigher = priceValue > minPrice && minPrice > 0;
-        
+
         const colorBorder = isLowest ? 'border-green-500/50 scale-[1.05] shadow-[0_0_20px_rgba(34,197,94,0.2)]' : (isHigher ? 'border-red-500/20' : 'border-white/10');
         const colorBg = isLowest ? 'bg-green-500/10' : (isHigher ? 'bg-red-500/5' : 'bg-white/5');
-        
+
         // Premium Badges
         let badgeHTML = '';
         if (isLowest) {
@@ -614,27 +614,27 @@ function displayComparison(data) {
             const diff = priceValue - minPrice;
             badgeHTML = '<span class="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg uppercase tracking-tighter z-20">+ ₹' + diff.toLocaleString('en-IN') + '</span>';
         }
-        
+
         const targetUrl = platformConfig.url;
 
         return '<a href="' + targetUrl + '" target="_blank" class="glass-panel p-6 min-h-[140px] border ' + colorBorder + ' ' + colorBg + ' flex flex-col justify-between transition-all duration-400 group relative hover:scale-[1.08] hover:z-20">' +
-                badgeHTML +
-                '<div class="flex justify-between items-center mb-4">' +
-                    '<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">' + platformConfig.platform + '</p>' +
-                    '<div class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-green-500/20 transition-colors">' +
-                        '<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-green-400 opacity-60 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>' +
-                    '</div>' +
-                '</div>' +
-                '<div>' +
-                    '<div class="flex items-baseline space-x-1">' +
-                        '<span class="text-sm font-bold text-slate-400 group-hover:text-green-400">₹</span>' +
-                        '<p class="text-3xl font-black text-white group-hover:text-green-400 transition-all">' + priceValue.toLocaleString('en-IN') + '</p>' +
-                    '</div>' +
-                    '<div class="flex items-center mt-1 space-x-1.5">' +
-                        '<div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></div>' +
-                        '<p class="text-[9px] text-slate-500 uppercase tracking-widest font-medium">Direct Link</p>' +
-                    '</div>' +
-                '</div>' +
+            badgeHTML +
+            '<div class="flex justify-between items-center mb-4">' +
+            '<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">' + platformConfig.platform + '</p>' +
+            '<div class="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-green-500/20 transition-colors">' +
+            '<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-green-400 opacity-60 group-hover:opacity-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>' +
+            '</div>' +
+            '</div>' +
+            '<div>' +
+            '<div class="flex items-baseline space-x-1">' +
+            '<span class="text-sm font-bold text-slate-400 group-hover:text-green-400">₹</span>' +
+            '<p class="text-3xl font-black text-white group-hover:text-green-400 transition-all">' + priceValue.toLocaleString('en-IN') + '</p>' +
+            '</div>' +
+            '<div class="flex items-center mt-1 space-x-1.5">' +
+            '<div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></div>' +
+            '<p class="text-[9px] text-slate-500 uppercase tracking-widest font-medium">Direct Link</p>' +
+            '</div>' +
+            '</div>' +
             '</a>';
     }).join('');
     shopsmartResults.classList.remove('hidden');
@@ -690,7 +690,7 @@ if (extractPhotosBtn) {
 }
 
 function showLvError(message) {
-    if(!lvErrorMessage) return;
+    if (!lvErrorMessage) return;
     const errorText = document.getElementById('lvErrorText');
     if (errorText) errorText.textContent = message;
     lvErrorMessage.classList.remove('hidden');
@@ -735,26 +735,26 @@ function displayReviews(reviews) {
     if (textOnly.length === 0) {
         textFeed.innerHTML =
             '<div class="glass-panel p-6 text-center border border-white/5 opacity-40">' +
-                '<p class="text-slate-500 text-xs italic">No written reviews found.</p>' +
+            '<p class="text-slate-500 text-xs italic">No written reviews found.</p>' +
             '</div>';
     } else {
         textFeed.innerHTML = textOnly.map((review, idx) =>
             '<div class="glass-panel static-glass p-5 border border-white/5 hover:border-blue-500/20 transition-all duration-300 group">' +
-                '<div class="flex items-start space-x-3">' +
-                    '<div class="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 border border-blue-500/20">' +
-                        '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
-                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>' +
-                        '</svg>' +
-                    '</div>' +
-                    '<div class="flex-1 min-w-0">' +
-                        '<div class="flex items-center space-x-2 text-[9px] text-blue-400 font-bold uppercase tracking-widest mb-1.5 opacity-80">' +
-                            '<span>Verified Buyer</span>' +
-                            '<span class="text-white/10">•</span>' +
-                            '<span>Review #' + (idx + 1) + '</span>' +
-                        '</div>' +
-                        '<p class="text-slate-300 text-sm leading-relaxed italic break-words">&ldquo;' + review.text + '&rdquo;</p>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="flex items-start space-x-3">' +
+            '<div class="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 border border-blue-500/20">' +
+            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>' +
+            '</svg>' +
+            '</div>' +
+            '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-center space-x-2 text-[9px] text-blue-400 font-bold uppercase tracking-widest mb-1.5 opacity-80">' +
+            '<span>Verified Buyer</span>' +
+            '<span class="text-white/10">•</span>' +
+            '<span>Review #' + (idx + 1) + '</span>' +
+            '</div>' +
+            '<p class="text-slate-300 text-sm leading-relaxed italic break-words">&ldquo;' + review.text + '&rdquo;</p>' +
+            '</div>' +
+            '</div>' +
             '</div>'
         ).join('');
     }
@@ -763,16 +763,16 @@ function displayReviews(reviews) {
     if (uniquePhotos.length === 0) {
         photoFeed.innerHTML =
             '<div class="glass-panel p-6 text-center border border-white/5 opacity-40">' +
-                '<div class="text-3xl mb-2">📷</div>' +
-                '<p class="text-slate-500 text-xs italic">No customer photos posted for this product.</p>' +
+            '<div class="text-3xl mb-2">📷</div>' +
+            '<p class="text-slate-500 text-xs italic">No customer photos posted for this product.</p>' +
             '</div>';
     } else {
         // Show photo count badge above the grid
         const countBadge =
             '<div class="col-span-full mb-2 flex items-center space-x-2">' +
-                '<span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">' +
-                    '📸 ' + uniquePhotos.length + ' Customer Photo' + (uniquePhotos.length > 1 ? 's' : '') + ' Found' +
-                '</span>' +
+            '<span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">' +
+            '📸 ' + uniquePhotos.length + ' Customer Photo' + (uniquePhotos.length > 1 ? 's' : '') + ' Found' +
+            '</span>' +
             '</div>';
 
         photoFeed.innerHTML = countBadge + uniquePhotos.map((imgUrl, i) => {
@@ -780,34 +780,34 @@ function displayReviews(reviews) {
             const proxiedUrl = `${API_URL}/image-proxy?url=${encodeURIComponent(imgUrl)}`;
             return (
                 '<div class="break-inside-avoid relative group mb-4">' +
-                    '<div class="rounded-2xl overflow-hidden border border-white/10 bg-white/5 ' +
-                         'transition-all duration-500 group-hover:border-emerald-500/40 ' +
-                         'group-hover:shadow-xl group-hover:shadow-emerald-500/10">' +
-                        // Loading skeleton
-                        '<div class="absolute inset-0 animate-pulse bg-white/5 rounded-2xl" id="skel_' + i + '"></div>' +
-                        '<img ' +
-                            'src="' + proxiedUrl + '" ' +
-                            'data-original="' + imgUrl + '" ' +
-                            'alt="Customer photo ' + (i + 1) + '" ' +
-                            'class="relative w-full h-auto object-cover transition-transform duration-500 ' +
-                                   'group-hover:scale-105 min-h-[80px]" ' +
-                            'loading="lazy" ' +
-                            'referrerpolicy="no-referrer" ' +
-                            'onload="var s=document.getElementById(\'skel_' + i + '\');if(s)s.remove();" ' +
-                            'onerror="' +
-                                'var s=document.getElementById(\'skel_' + i + '\');if(s)s.remove();' +
-                                'if(this.src!==this.dataset.original){' +
-                                    'this.onerror=null;' +
-                                    'this.src=this.dataset.original;' +
-                                '}' +
-                            '" />' +
-                        '<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent ' +
-                             'opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-3">' +
-                            '<span class="text-[9px] text-emerald-300 font-bold uppercase tracking-widest">' +
-                                '✓ Customer Photo' +
-                            '</span>' +
-                        '</div>' +
-                    '</div>' +
+                '<div class="rounded-2xl overflow-hidden border border-white/10 bg-white/5 ' +
+                'transition-all duration-500 group-hover:border-emerald-500/40 ' +
+                'group-hover:shadow-xl group-hover:shadow-emerald-500/10">' +
+                // Loading skeleton
+                '<div class="absolute inset-0 animate-pulse bg-white/5 rounded-2xl" id="skel_' + i + '"></div>' +
+                '<img ' +
+                'src="' + proxiedUrl + '" ' +
+                'data-original="' + imgUrl + '" ' +
+                'alt="Customer photo ' + (i + 1) + '" ' +
+                'class="relative w-full h-auto object-cover transition-transform duration-500 ' +
+                'group-hover:scale-105 min-h-[80px]" ' +
+                'loading="lazy" ' +
+                'referrerpolicy="no-referrer" ' +
+                'onload="var s=document.getElementById(\'skel_' + i + '\');if(s)s.remove();" ' +
+                'onerror="' +
+                'var s=document.getElementById(\'skel_' + i + '\');if(s)s.remove();' +
+                'if(this.src!==this.dataset.original){' +
+                'this.onerror=null;' +
+                'this.src=this.dataset.original;' +
+                '}' +
+                '" />' +
+                '<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent ' +
+                'opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-3">' +
+                '<span class="text-[9px] text-emerald-300 font-bold uppercase tracking-widest">' +
+                '✓ Customer Photo' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             );
         }).join('');
@@ -821,7 +821,7 @@ if (toggleAuthBtn) {
     toggleAuthBtn.addEventListener('click', (e) => {
         e.preventDefault();
         isLoginView = !isLoginView;
-        
+
         if (isLoginView) {
             authTitle.textContent = 'Login';
             authSubtitle.textContent = 'Enter your credentials to continue';
@@ -871,7 +871,7 @@ if (authForm) {
             // Success! (Transition to sessionStorage)
             sessionStorage.setItem('token', result.token);
             sessionStorage.setItem('user', JSON.stringify(result.user));
-            
+
             showApp(result.user);
         } catch (error) {
             authErrorMessage.querySelector('p').textContent = error.message;
