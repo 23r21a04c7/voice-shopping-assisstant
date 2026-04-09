@@ -1,5 +1,5 @@
 // API Configuration
-const API_URL = 'https://voice-shopping-assisstant-backend.onrender.com';
+const API_URL = 'https://voice-shopping-assisstant-backend.onrender.com/api';
 
 // DOM Elements
 const micButton = document.getElementById('micButton');

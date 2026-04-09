@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "voice-shopping-frontend",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
