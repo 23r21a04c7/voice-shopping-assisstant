@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const apiRoutes = require('./routes/api');
 const errorHandler = require('./middleware/errorHandler');
 require('dotenv').config();
@@ -15,6 +16,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from frontend
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 // Logging middleware
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
@@ -24,16 +28,9 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api', apiRoutes);
 
-// Root endpoint
+// Root endpoint - serve frontend
 app.get('/', (req, res) => {
-    res.json({
-        message: 'Voice Shopping Assistant API',
-        version: '1.0.0',
-        endpoints: {
-            health: '/api/health',
-            trackPrice: 'POST /api/track-price'
-        }
-    });
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // Error handling middleware (must be last)

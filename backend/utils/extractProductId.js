@@ -29,7 +29,7 @@ module.exports = function (url) {
     // Ajio URL patterns:
     // Pattern 1: /p/{productId}
     // Pattern 2: /{product-name}/p/{productId}
-    const ajioMatch = url.match(/\/p\/([a-zA-Z0-9-]+)(?:\?|$)/);
+    const ajioMatch = url.match(/\/p\/([a-zA-Z0-9-_]+)(?:\?|$)/);
     if (ajioMatch && url.includes('ajio.com')) {
         return { platform: 'ajio', id: ajioMatch[1] };
     }

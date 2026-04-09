@@ -1,0 +1,62 @@
+Debugging Flipkart Images...
+Found 84 total images.
+[0] 48x48 Class: rQ_eOE Alt: Flipkart
+    Src: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm
+[1] 48x48 Class: rQ_eOE Alt: Minutes
+    Src: https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/minutesv2-e552b0.svg
+[2] 48x48 Class: rQ_eOE Alt: Grocery
+    Src: https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/groceryv2-df1208.svg
+[3] 48x48 Class: rQ_eOE Alt: Travel
+    Src: https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/travelV2-059e93.svg
+[4] 800x1050 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/800/1070/xif0q/mobile/h/d/9/-original-imagtc2qzgnnuhxh.jpeg?q=9
+[5] 480x360 Class:  Alt: null
+    Src: https://img.youtube.com/vi/jFQjXIK0nIA/0.jpg?q=90
+[6] 56x56 Class:  Alt: null
+    Src: https://rukminim2.flixcart.com/www/112/112/promos/25/04/2019/0049b8f4-06f2-4488-93e1-f64f194b6415.pn
+[7] 378x1070 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/800/1070/xif0q/mobile/y/p/n/-original-imagtc5fxzdrdvyc.jpeg?q=9
+[8] 800x464 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/800/1070/xif0q/mobile/u/m/3/-original-imagtc5ffhbausfy.jpeg?q=9
+[9] 800x957 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/800/1070/xif0q/mobile/d/k/t/-original-imah4xe6cff8cejm.jpeg?q=9
+[10] 80x105 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/80/110/xif0q/mobile/h/d/9/-original-imagtc2qzgnnuhxh.jpeg?q=90
+[11] 80x105 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/80/110/xif0q/mobile/j/z/3/-original-imagtc5fqyz8tu4c.jpeg?q=90
+[12] 80x105 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/80/110/xif0q/mobile/a/c/k/-original-imagtc5fuzkvczr7.jpeg?q=90
+[13] 80x105 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/80/110/xif0q/mobile/k/l/l/-original-imagtc5fz9spysyk.jpeg?q=90
+[14] 80x105 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/80/110/xif0q/mobile/f/l/g/-original-imagtc5frtz9j7tb.jpeg?q=90
+[15] 203x262 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/blobio/690/890/imr/blobio-imr_9a9406af26544e2aaa222c486a850719.jpeg?q
+[16] 124x160 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/blobio/690/890/imr/blobio-imr_9758e48e16b54769976852234c0ff72c.jpeg?q
+[17] 124x160 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/blobio/690/890/imr/blobio-imr_de46738b1c1a43a89aa057e58d016978.jpeg?q
+[18] 124x160 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/blobio/690/890/imr/blobio-imr_0fa1965ab4a149efa5f8b9ade01f86e1.jpg?q=
+[19] 124x160 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/blobio/690/890/imr/blobio-imr_1954910773e04120877927a0c6ce1db7.jpg?q=
+[20] 1620x375 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/fk-p-flap/1620/380/image/58f7c26ceed824de.jpg?q=90
+[21] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/xif0q/mobile/p/e/2/-original-imahfjsfgu7vjkvw.jpeg?q=90
+[22] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/ktketu80/mobile/6/n/d/iphone-13-mlpg3hn-a-apple-origina
+[23] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/xif0q/mobile/j/7/f/-original-imahft5gfgwpt6pr.jpeg?q=90
+[24] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/ktketu80/mobile/s/l/c/iphone-13-mlpf3hn-a-apple-origina
+[25] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/xif0q/mobile/h/d/9/-original-imagtc2qzgnnuhxh.jpeg?q=90
+[26] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/xif0q/mobile/n/q/h/-original-imahgfmzjj8gtqbc.jpeg?q=90
+[27] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/xif0q/mobile/j/z/3/-original-imagtc5fqyz8tu4c.jpeg?q=90
+[28] 205x273 Class:  Alt: Image
+    Src: https://rukminim2.flixcart.com/image/280/370/xif0q/mobile/0/q/f/-original-imahadxg8mgjzrfh.jpeg?q=90
+[29] 150x150 Class:  Alt: Instagram
+    Src: https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/InstagramLogo-854a2c.s

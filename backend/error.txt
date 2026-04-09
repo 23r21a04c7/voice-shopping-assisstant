@@ -1,0 +1,49 @@
+﻿node : C:\Users\yadav\Desktop\ONEDRIVE\Documents
+\javaprep\javanote\voice-shopping-assistant\voic
+e-shopping-assistant\backend\node_modules\expres
+s\lib\router\route.js:216
+At line:1 char:1
++ node server.js 2>&1 | Out-File -Encoding utf8 
+error.txt
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C: 
+   \Users\yadav\...er\route.js:216:String) [],  
+   RemoteException
+    + FullyQualifiedErrorId : NativeCommandErro 
+   r
+ 
+        throw new Error(msg);
+        ^
+
+Error: Route.post() requires a callback 
+function but got a [object Undefined]
+    at Route.<computed> [as post] (C:\Users\yada
+v\Desktop\ONEDRIVE\Documents\javaprep\javanote\v
+oice-shopping-assistant\voice-shopping-assistant
+\backend\node_modules\express\lib\router\route.j
+s:216:15)
+    at proto.<computed> [as post] (C:\Users\yada
+v\Desktop\ONEDRIVE\Documents\javaprep\javanote\v
+oice-shopping-assistant\voice-shopping-assistant
+\backend\node_modules\express\lib\router\index.j
+s:521:19)
+    at Object.<anonymous> (C:\Users\yadav\Deskto
+p\ONEDRIVE\Documents\javaprep\javanote\voice-sho
+pping-assistant\voice-shopping-assistant\backend
+\routes\api.js:18:8)
+    at Module._compile 
+(node:internal/modules/cjs/loader:1812:14)
+    at Object..js 
+(node:internal/modules/cjs/loader:1943:10)
+    at Module.load 
+(node:internal/modules/cjs/loader:1533:32)
+    at Module._load 
+(node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad 
+(node:internal/modules/cjs/loader:255:19)
+    at Module.require 
+(node:internal/modules/cjs/loader:1556:12)
+    at require 
+(node:internal/modules/helpers:152:16)
+
+Node.js v24.14.0

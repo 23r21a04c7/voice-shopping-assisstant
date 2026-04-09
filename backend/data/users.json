@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1774467740675",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "test@example.com",
+    "passwordHash": "$2b$10$mmRIo3r4NQCZ8w2yG5OOz.EU99LP4I4LEoh/ztxUp0S8mAhlf3YWi",
+    "createdAt": "2026-03-25T19:42:20.675Z"
+  },
+  {
+    "id": "1774541158441",
+    "firstName": "Demo",
+    "lastName": "User",
+    "email": "demouser@example.com",
+    "passwordHash": null,
+    "picture": "",
+    "provider": "google",
+    "createdAt": "2026-03-26T16:05:58.441Z"
+  },
+  {
+    "id": "1774541343242",
+    "firstName": "Robin",
+    "lastName": "Hood",
+    "email": "robinhood@gmail.com",
+    "passwordHash": "$2b$10$niumFeigCANI8YSlvPfYoOOTHXU0XMl6USpSOzPgjNKd4jGHNrchK",
+    "createdAt": "2026-03-26T16:09:03.242Z"
+  },
+  {
+    "id": "1774541442447",
+    "firstName": "Hemanth",
+    "lastName": "Kumar",
+    "email": "hemanthfriends529@gmail.com",
+    "passwordHash": "$2b$10$ZCAziLZviSMq6d1.Q7HsZeIhQKaFUtFhjgJdj5jLn3nlT3l3ifCFS",
+    "createdAt": "2026-03-26T16:10:42.447Z"
+  },
+  {
+    "id": "1774691290680",
+    "firstName": "hemanth",
+    "lastName": "",
+    "email": "hemanthfriends123@gamil.com",
+    "passwordHash": "$2b$10$A.Gd85rGzgbZxOdF.PoFcOZWBDkz0xFkXebwRr7zHLH8NE0gjr5cG",
+    "createdAt": "2026-03-28T09:48:10.680Z"
+  },
+  {
+    "id": "1774691388287",
+    "firstName": "hemanth",
+    "lastName": "",
+    "email": "hemanthfriends123@gmail.com",
+    "passwordHash": "$2b$10$8fe9lAfqA2flEs5O9eaVpenCKJEwazyVc7Sbr1Lg/r0MIs2QAIJK2",
+    "createdAt": "2026-03-28T09:49:48.287Z"
+  }
+]

@@ -1,116 +1,125 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
+const puppeteerExtra = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteerExtra.use(StealthPlugin());
 
 exports.scrape = async (urlOrProductId) => {
+    let browser;
     try {
-        // Accept either full URL or product ID for backwards compatibility
         let url;
-        let cleanId; // Define in broader scope for demo data fallback
+        let cleanId; 
 
         if (urlOrProductId.startsWith('http')) {
-            // Full URL provided - use it directly
             url = urlOrProductId;
-            // Extract product ID from URL for demo data fallback
             const match = urlOrProductId.match(/\/p\/(?:itm)?([a-zA-Z0-9]+)/);
             cleanId = match ? match[1] : 'unknown';
         } else {
-            // Product ID provided - construct URL (legacy support)
             cleanId = urlOrProductId.startsWith('itm') ? urlOrProductId : `itm${urlOrProductId}`;
             url = `https://www.flipkart.com/product/p/${cleanId}`;
         }
 
-        console.log(`Scraping Flipkart: ${url}`);
+        console.log(`Scraping Flipkart via Puppeteer: ${url}`);
 
-        // Make HTTP request with enhanced headers to mimic a real browser
-        const response = await axios.get(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-                'Sec-Fetch-Dest': 'document',
-                'Sec-Fetch-Mode': 'navigate',
-                'Sec-Fetch-Site': 'none',
-                'Cache-Control': 'max-age=0'
-            },
-            timeout: 15000,
-            maxRedirects: 5,
-            validateStatus: function (status) {
-                return status >= 200 && status < 500; // Accept 4xx responses
-            }
+        browser = await puppeteerExtra.launch({
+            headless: "new",
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
         });
 
-        // If Flipkart blocks us (403, 429, 500), return demo data
-        if (response.status >= 400) {
-            console.log(`Flipkart returned status ${response.status}, using demo data`);
-            return generateDemoData(cleanId);
-        }
+        const page = await browser.newPage();
+        
+        // Anti-bot stealth user agent
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+        
+        // Briefly wait for price render
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // Load HTML into cheerio
-        const $ = cheerio.load(response.data);
+        const result = await page.evaluate(() => {
+            const titleEl = document.querySelector('.B_NuCI') || document.querySelector('.VU-ZEz') || document.querySelector('[class*="pdp-name"]') || document.querySelector('h1');
+            
+            // Priority: The main struck-through / highlighted actual price. Flipkart frequently uses .Nx9bqj
+            const priceEl = document.querySelector('.Nx9bqj.CrvsTz') || document.querySelector('.Nx9bqj') || document.querySelector('._30jeq3') || document.querySelector('._1_WHN1');
+            
+            // Special Flipkart Sale Banners (e.g., "WOW! DEAL Buy at ₹985")
+            // This grabs any deeply discounted promotion text if the main price is hidden
+            const promoEl = Array.from(document.querySelectorAll('div, span')).find(el => el.innerText && el.innerText.includes('Buy at ₹'));
+            let promoPriceText = null;
+            if (promoEl) {
+                const match = promoEl.innerText.match(/Buy at [₹Rs.\s]*([0-9,]+)/i);
+                if (match) promoPriceText = match[1];
+            }
 
-        // Extract product title - Flipkart uses different class names
-        const title = $('.B_NuCI').first().text().trim() ||
-            $('.VU-ZEz').first().text().trim() ||
-            $('h1').first().text().trim() ||
-            'Flipkart Product';
+            const imgEl = document.querySelector('._396cs4 img') || document.querySelector('._2r_T1I img') || document.querySelector('img[loading="eager"]');
 
-        // Extract price - Flipkart uses different class names
+            return {
+                title: titleEl ? titleEl.innerText.trim() : null,
+                priceText: priceEl ? priceEl.innerText : null,
+                promoPriceText: promoPriceText,
+                img: imgEl ? imgEl.src : null
+            };
+        });
+
+        await browser.close();
+
         let price = null;
-
-        const priceText = $('._30jeq3').first().text() ||
-            $('._1_WHN1').first().text() ||
-            $('[class*="price"]').first().text();
-
-        if (priceText) {
-            price = parseFloat(priceText.replace(/[,₹Rs.\s]/g, '').trim());
+        
+        // Always prioritize the promo/offer price if it exists (e.g. "Buy at ₹985")
+        if (result.promoPriceText) {
+            price = parseFloat(result.promoPriceText.replace(/[,₹Rs.\s]/g, '').trim());
+        } else if (result.priceText) {
+            price = parseFloat(result.priceText.replace(/[,₹Rs.\s]/g, '').trim());
         }
 
-        // If we couldn't extract meaningful data, use demo data
-        if (!title || title === 'Flipkart Product' || !price) {
-            console.log('Could not extract product data, using demo data');
-            return generateDemoData(cleanId);
+        if (!result.title || !price) {
+            console.log('Could not extract product data from Puppeteer, using demo data');
+            return generateDemoData(urlOrProductId);
         }
 
-        // Extract availability
-        const availability = $('._16FRp0').first().text().trim() ||
-            $('._3xgqrA').first().text().trim() ||
-            'In stock';
+        console.log('Flipkart scraping successful:', { title: result.title, price });
 
-        // Extract image
-        const image = $('._396cs4 img').first().attr('src') ||
-            $('._2r_T1I img').first().attr('src') ||
-            null;
-
-        const data = {
-            title,
+        return {
+            title: result.title,
             currentPrice: price,
-            lowestPrice: Math.round(price * 0.95), // Assume 5% lower was the lowest
-            availability,
-            image,
+            lowestPrice: Math.round(price * 0.95),
+            availability: 'In stock',
+            image: result.img,
             platform: 'Flipkart',
             priceHistory: generateMockPriceHistory(price),
             isDemo: false
         };
 
-        console.log('Flipkart scraping successful:', { title, price });
-        return data;
-
     } catch (error) {
-        console.error('Flipkart scraping error:', error.message);
-        // Instead of throwing, return demo data
-        console.log('Returning demo data due to scraping error');
+        if (browser) await browser.close();
+        console.error('Flipkart Puppeteer scraping error:', error.message);
         return generateDemoData(urlOrProductId);
     }
 };
 
-// Generate demo data when scraping fails
-function generateDemoData(productId) {
-    const demoPrice = 15999; // Demo price
+function generateDemoData(urlOrProductId) {
+    const demoPrice = 15999;
+    let fallbackTitle = 'Flipkart Product (Demo)';
+    
+    // Extract sensible name from URL if possible
+    if (urlOrProductId && urlOrProductId.includes('.com/')) {
+        try {
+            const urlObj = new URL(urlOrProductId);
+            // Paths are usually /product-slug/p/itm... or /p/p/itm...
+            let slug = urlObj.pathname.split('/')[1];
+            
+            // If the first part is 'p' or 'product', the name might be later or missing
+            if ((slug === 'p' || slug === 'product') && urlObj.pathname.split('/')[2]) {
+                slug = urlObj.pathname.split('/')[2];
+            }
+
+            if (slug && slug !== 'p' && slug !== 'product') {
+                // Convert 'motorola-g35-5g-guava-red-128-gb' to 'Motorola G35 5g Guava Red 128 Gb'
+                fallbackTitle = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            }
+        } catch (e) {}
+    }
+
     return {
-        title: 'Flipkart Product (Demo)',
+        title: fallbackTitle,
         currentPrice: demoPrice,
         lowestPrice: Math.round(demoPrice * 0.92),
         availability: 'Check on Flipkart',
@@ -118,31 +127,22 @@ function generateDemoData(productId) {
         platform: 'Flipkart',
         priceHistory: generateMockPriceHistory(demoPrice),
         isDemo: true,
-        demoMessage: 'Note: Flipkart has anti-scraping measures. Showing demo data. Please visit Flipkart directly for accurate pricing.'
+        demoMessage: 'Note: Flipkart has anti-scraping measures. Showing demo data.'
     };
 }
 
-// Helper function to generate mock price history
 function generateMockPriceHistory(currentPrice) {
     if (!currentPrice || currentPrice === 0) return [];
-
     const history = [];
     const today = new Date();
-
-    // Generate 30 days of mock data
     for (let i = 29; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(date.getDate() - i);
-
-        // Create realistic price variations (±5-10%)
-        const variation = (Math.random() - 0.5) * 0.1; // -5% to +5%
-        const price = Math.round(currentPrice * (1 + variation));
-
+        const variation = (Math.random() - 0.5) * 0.1;
         history.push({
             date: date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }),
-            price: price
+            price: Math.round(currentPrice * (1 + variation))
         });
     }
-
     return history;
 }
